@@ -260,7 +260,7 @@ Mở: [https://lylah-unlaboring-tenurially.ngrok-free.dev](https://lylah-unlabor
 
 1. Giới thiệu Next.js 15 & App Router.
 2. Cấu trúc `src/app`.
-3. Tích hợp Tailwind.
+3. Tích hợp Tailwind: <https://tailwindcss.com>.
 4. Sử dụng `useState`, `useEffect` để quản lý state & lifecycle.
 5. Demo chat real-time với Socket.IO.
 6. Router trong Next.js (`/chat` route).
