@@ -20,6 +20,11 @@ export default function Home() {
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              handleLogin();
+            }
+          }}
           className="w-full border border-gray-300 p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Nhập tên của bạn"
         />

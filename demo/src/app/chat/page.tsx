@@ -48,6 +48,11 @@ export default function ChatPage() {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                sendMessage();
+              }
+            }}
             className="flex-1 border rounded p-2"
             placeholder="Nhập tin nhắn..."
           />

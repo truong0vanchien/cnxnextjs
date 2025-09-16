@@ -86,66 +86,47 @@ app.prepare().then(() => {
 ## 4. Trang chủ (`src/app/page.tsx`)
 
 ```tsx
-"use client";
+'use client'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { useState, useEffect } from "react";
-import io from "socket.io-client";
+export default function Home() {
+  const [username, setUsername] = useState("");
+  const router = useRouter();
 
-const socket = io("http://localhost:3000");
-
-export default function ChatPage() {
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
-
-  useEffect(() => {
-    socket.on("chat message", (msg: string) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-
-    return () => {
-      socket.off("chat message");
-    };
-  }, []);
-
-  const sendMessage = () => {
-    if (message.trim() !== "") {
-      socket.emit("chat message", message);
-      setMessage("");
+  const handleLogin = () => {
+    if (username.trim() !== "") {
+      router.push(`/chat?username=${username}`);
     }
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
-      <h1 className="text-2xl font-bold mb-4">Chat Demo</h1>
-
-      <div className="w-full max-w-md bg-gray-100 p-4 rounded-lg shadow">
-        <div className="h-64 overflow-y-auto border-b mb-4 p-2">
-          {messages.map((msg, i) => (
-            <p key={i} className="mb-1">
-              {msg}
-            </p>
-          ))}
-        </div>
-
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="flex-1 border rounded p-2"
-            placeholder="Type a message..."
-          />
-          <button
-            onClick={sendMessage}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400"
-          >
-            Send
-          </button>
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+      <h1 className="text-3xl font-bold mb-6">Đăng nhập Chat</h1>
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              handleLogin();
+            }
+          }}
+          className="w-full border border-gray-300 p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Nhập tên của bạn"
+        />
+        <button
+          onClick={handleLogin}
+          className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+        >
+          Vào Chat
+        </button>
       </div>
     </div>
   );
 }
+
 ```
 
 ## 5. Trang Chat (`src/app/chat/page.tsx`)
@@ -154,11 +135,15 @@ export default function ChatPage() {
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:3000");
 
 export default function ChatPage() {
+  const searchParams = useSearchParams();
+  const username = searchParams.get("username") || "Người dùng ẩn danh";
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
 
@@ -174,14 +159,14 @@ export default function ChatPage() {
 
   const sendMessage = () => {
     if (message.trim() !== "") {
-      socket.emit("chat message", message);
+      socket.emit("chat message", `${username}: ${message}`);
       setMessage("");
     }
   };
 
   return (
     <div className="flex flex-col items-center p-6">
-      <h1 className="text-2xl font-bold mb-4">Chat Demo</h1>
+      <h1 className="text-2xl font-bold mb-4">Chat với {username}</h1>
 
       <div className="w-full max-w-md bg-gray-100 p-4 rounded-lg shadow">
         <div className="h-64 overflow-y-auto border-b mb-4 p-2">
@@ -197,14 +182,19 @@ export default function ChatPage() {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                sendMessage();
+              }
+            }}
             className="flex-1 border rounded p-2"
-            placeholder="Type a message..."
+            placeholder="Nhập tin nhắn..."
           />
           <button
             onClick={sendMessage}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400"
           >
-            Send
+            Gửi
           </button>
         </div>
       </div>
