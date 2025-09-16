@@ -13,7 +13,7 @@ Demo ứng dụng Chat sử dụng **Next.js 15 (App Router, TypeScript, Tailwin
 
 ```bash
 # Tạo project mới
-npx create-next-app@latest demo --typescript --tailwind --use-npm
+npx create-next-app@latest demo --typescript --tailwind
 
 # Di chuyển vào thư mục
 cd demo
@@ -21,10 +21,11 @@ cd demo
 # Cấu trúc chính:
 src/
   app/
-    page.tsx          # Trang chủ
+    page.tsx          # Đăng nhập
     chat/
       page.tsx        # Trang chat
   server.ts           # Socket
+package.json          # Cấu hình
 ```
 
 ## 3. Cấu hình Socket.IO
@@ -255,9 +256,17 @@ export default function ChatPage() {
 npm run server
 ```
 
-Mở: [http://localhost:3000/chat](http://localhost:3000/chat)
+Mở: [http://localhost:3000](http://localhost:3000)
 
-## 7. Nội dung trình bày (20-30 phút)
+## 8. Chạy với tên miền (nếu có)
+
+```bash
+ngrok http 3000 --domain lylah-unlaboring-tenurially.ngrok-free.dev
+```
+
+Mở: [https://lylah-unlaboring-tenurially.ngrok-free.dev](https://lylah-unlaboring-tenurially.ngrok-free.dev)
+
+## 9. Nội dung trình bày (20-30 phút)
 
 1. Giới thiệu Next.js 15 & App Router.
 2. Cấu trúc `src/app`.
